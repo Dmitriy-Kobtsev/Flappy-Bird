@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Flappy Bird</title>
+    </head>
+    <body style="height: 100vh; background: #111; text-align: center">
+        <canvas style="border: 2px solid skyblue;" id="c" width="400" height="400"></canvas>
+        <script>
+            context = c.getContext("2d");
+            const bird = new Image();
+            bird.src = "under2.png"
+            birdX = birdDy = score = bestScore = 0;
+            interval = birdSize = pipeWidth = topPipeBottomY = 24;
+            birdY = pipeGap = 200;
+            canvasSize = pipeX = 400;
+            c.onclick = () => (birdDy=9);
+            setInterval(() =>{
+                context.fillStyle = "skyblue";
+                context.fillRect(0,0,canvasSize,canvasSize);
+                birdY -= birdDy -= 0.5;               
+                context.drawImage(bird, birdX, birdY,birdSize*2, birdSize*2);
+                context.fillStyle = "green";
+                pipeX -=8;
+                
+                if (pipeX<-pipeWidth){
+                    pipeX=canvasSize;
+                    topPipeBottomY = pipeGap*Math.random()
+                };
+                context.fillRect(pipeX, 0, pipeWidth, topPipeBottomY);
+                context.fillRect(pipeX, topPipeBottomY+pipeGap, pipeWidth, canvasSize);
+                context.fillStyle = "black";
+                context.fillText(score++, 9,25);
+                bestScore = bestScore < score ? score : bestScore;
+                context.fillText(`Best: ${bestScore}`, 9, 50);
+                if (((birdY<topPipeBottomY || birdY>topPipeBottomY + pipeGap) && pipeX<birdSize*2) || (birdY > canvasSize)) {
+                    birdDy = 0;
+                    birdY = 200;
+                    pipeX = canvasSize;
+                    score = 0;
+                };
+            }, interval)
+        </script>
+    </body>
+</html>
